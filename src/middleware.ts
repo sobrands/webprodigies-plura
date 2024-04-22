@@ -1,11 +1,8 @@
 import { authMiddleware } from "@clerk/nextjs";
-import { urlToUrlWithoutFlightMarker } from "next/dist/client/components/app-router";
 import { NextResponse } from "next/server";
 
 export default authMiddleware({
   publicRoutes: ["/site", "api/uploadthing"],
-<<<<<<< HEAD
-=======
   async afterAuth(auth, req) {
     // rewrite for domains
     const url = req.nextUrl;
@@ -44,7 +41,6 @@ export default authMiddleware({
       return NextResponse.rewrite(new URL(`${pathWithSearchParams}`, req.url));
     }
   },
->>>>>>> ba4fb1412611a7136da43c3c006951b9ceb56d60
 });
 
 export const config = {

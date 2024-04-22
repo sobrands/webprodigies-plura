@@ -2,9 +2,12 @@
 
 import { Agency } from "@prisma/client";
 import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useToast } from "../ui/use-toast";
 import { AlertDialog } from "../ui/alert-dialog";
-import { useRouter } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -13,16 +16,13 @@ import {
   CardTitle,
 } from "../ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import FileUpload from "../global/file-upload";
 
 type Props = {
   data?: Partial<Agency>;
 };
 
-const FormSchema = z.object({
+const formSchema = z.object({
   name: z
     .string()
     .min(2, { message: "Agency name must be at least 2 characters." }),
@@ -41,9 +41,9 @@ const AgencyDetails = ({ data }: Props) => {
   const { toast } = useToast();
   const router = useRouter();
   const [deletingAgency, setDeletingAgency] = useState(false);
-  const form = useForm<z.infer<typeof FormSchema>>({
+  const form = useForm<z.infer<typeof formSchema>>({
     mode: "onChange",
-    resolver: zodResolver(FormSchema),
+    resolver: zodResolver(formSchema),
     defaultValues: {
       name: data?.name,
       companyEmail: data?.companyEmail,
@@ -66,9 +66,12 @@ const AgencyDetails = ({ data }: Props) => {
     }
   }, [data]);
 
-  const handleSubmit = async () => { };
+  const handleSubmit = async (values: z.infer<typeof formSchema>) => {
+    console.log(values);
+  };
 
   return (
+    // Alert Dialog used to prompt when deleting
     <AlertDialog>
       <Card className="w-full">
         <CardHeader>

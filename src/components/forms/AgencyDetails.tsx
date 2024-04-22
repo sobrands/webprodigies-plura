@@ -15,8 +15,16 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
 import FileUpload from "../global/file-upload";
+import { Input } from "../ui/input";
 
 type Props = {
   data?: Partial<Agency>;
@@ -26,8 +34,8 @@ const formSchema = z.object({
   name: z
     .string()
     .min(2, { message: "Agency name must be at least 2 characters." }),
-  companyEmail: z.string().min(1),
-  companyPhone: z.string().min(1),
+  companyEmail: z.string().min(1).email("Invalid Email!"),
+  companyPhone: z.string().min(1, "Must have more than 1 number!"),
   whiteLabel: z.boolean(),
   address: z.string().min(1),
   city: z.string().min(1),
@@ -101,6 +109,58 @@ const AgencyDetails = ({ data }: Props) => {
                         value={field.value}
                       ></FileUpload>
                     </FormControl>
+                  </FormItem>
+                )}
+              ></FormField>
+              <div className="flex gap-4">
+                <FormField
+                  disabled={isLoading}
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Agency Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Your Agency Name" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                ></FormField>
+                <FormField
+                  disabled={isLoading}
+                  control={form.control}
+                  name="companyEmail"
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel>Agency Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Your Agency Name"
+                          type="email"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                ></FormField>
+              </div>
+              <FormField
+                disabled={isLoading}
+                control={form.control}
+                name="companyPhone"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>Agency Phone Number</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Phone Number"
+                        type="email"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
                   </FormItem>
                 )}
               ></FormField>

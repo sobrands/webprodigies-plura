@@ -8,7 +8,7 @@ import {
 import React, { useEffect, useMemo, useState } from "react";
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "../ui/sheet";
 import { Button } from "../ui/button";
-import { ChevronsUpDown, Compass, Menu } from "lucide-react";
+import { ChevronsUpDown, Compass, Menu, PlusCircleIcon } from "lucide-react";
 import clsx from "clsx";
 import { AspectRatio } from "../ui/aspect-ratio";
 import Image from "next/image";
@@ -164,7 +164,69 @@ const MenuOptions = ({
                         </CommandItem>
                       </CommandGroup>
                     )}
+                  <CommandGroup heading="Accounts">
+                    {!!subAccounts
+                      ? subAccounts.map((subaccount) => (
+                        <CommandItem
+                          key={subaccount.id}
+                          className="!bg-transparent my-2 text-primary border-[1px] 
+                        border-border p-2 rounded-md hover:!bg-muted cursor-pointer transition-all"
+                        >
+                          {defaultOpen ? (
+                            <Link
+                              href={`/subaccount/${user?.subaccount.id}`}
+                              className="flex gap-4 w-full h-full"
+                            >
+                              <div className="relative w-16">
+                                <Image
+                                  src={user?.subaccount.subAccountLogo}
+                                  alt="SubAccount Logo"
+                                  fill
+                                  className="rounded-md object-contain"
+                                />
+                              </div>
+                              <div className="flex flex-col flex-1">
+                                {user?.subaccount.name}
+                                <span className="text-muted-foreground">
+                                  {user?.subaccount.address}
+                                </span>
+                              </div>
+                            </Link>
+                          ) : (
+                            <SheetClose asChild>
+                              <Link
+                                href={`/subaccount/${user?.subaccount.id}`}
+                                className="flex gap-4 w-full h-full"
+                              >
+                                <div className="relative w-16">
+                                  <Image
+                                    src={user?.subaccount.subAccountLogo}
+                                    alt="SubAccount Logo"
+                                    fill
+                                    className="rounded-md object-contain"
+                                  />
+                                </div>
+                                <div className="flex flex-col flex-1">
+                                  {user?.subaccount.name}
+                                  <span className="text-muted-foreground">
+                                    {user?.subaccount.address}
+                                  </span>
+                                </div>
+                              </Link>
+                            </SheetClose>
+                          )}
+                        </CommandItem>
+                      ))
+                      : "No Accounts"}
+                  </CommandGroup>
                 </CommandList>
+                {(user?.role === "AGENCY_OWNER" ||
+                  user?.role === "AGENCY_ADMIN") && (
+                    <Button className="w-full flex gap-2">
+                      <PlusCircleIcon size={15} />
+                      Create Sub Account
+                    </Button>
+                  )}
               </Command>
             </PopoverContent>
           </Popover>

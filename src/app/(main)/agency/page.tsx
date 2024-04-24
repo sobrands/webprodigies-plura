@@ -46,8 +46,10 @@ const Page = async ({
     }
   }
 
+  // If user has no agency created yet
   const authUser = await currentUser();
 
+  // Render form to create agency
   return (
     <div className="flex justify-center items-center mt-4">
       <div className="max-w-[850px] border-[1px] p-4 rounded-xl">

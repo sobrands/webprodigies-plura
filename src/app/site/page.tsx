@@ -44,7 +44,7 @@ export default function Home() {
           />
         </div>
         <div
-          className="bottom-0 top-[50%] bg-gradient-to-t
+          className="bottom-[60px] md:bottom-0 top-[50%] bg-gradient-to-t
         dark:from-background left-0 right-0 absolute z-10"
         ></div>
       </section>

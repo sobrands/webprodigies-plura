@@ -2,7 +2,7 @@ import { authMiddleware } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 export default authMiddleware({
-  publicRoutes: ["/site", "api/uploadthing"],
+  publicRoutes: ["/site", "/api/uploadthing"],
   async afterAuth(auth, req) {
     // rewrite for domains
     const url = req.nextUrl;

@@ -7,6 +7,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useToast } from "../ui/use-toast";
+import { v4 } from "uuid";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -43,6 +45,7 @@ import {
   initUser,
   saveActivityLogsNotification,
   updateAgencyDetails,
+  upsertAgency,
 } from "@/lib/queries";
 import { Button } from "../ui/button";
 import { Loader2 } from "lucide-react";
@@ -99,7 +102,6 @@ const AgencyDetails = ({ data }: Props) => {
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       let newUserData;
-      let customerId;
       if (!data?.id) {
         // For stripe payment
         const bodyData = {
@@ -124,13 +126,38 @@ const AgencyDetails = ({ data }: Props) => {
           },
         };
         // WIP: custID
-        const newUserData = await initUser({ role: "AGENCY_OWNER" });
-        if (!data?.customerId) {
-          // const response = await upsert
+        newUserData = await initUser({ role: "AGENCY_OWNER" });
+        if (!data?.id) {
+          const response = await upsertAgency({
+            id: data?.id ? data.id : v4(),
+            address: values.address,
+            agencyLogo: values.agencyLogo,
+            city: values.city,
+            companyPhone: values.companyPhone,
+            country: values.country,
+            name: values.name,
+            state: values.state,
+            whiteLabel: values.whiteLabel,
+            zipCode: values.zipCode,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            companyEmail: values.companyEmail,
+            connectAccountId: "",
+            goal: 5,
+          });
+          toast({
+            title: "Created Agency",
+          });
+          return router.refresh();
         }
       }
     } catch (error) {
       console.log(error);
+      toast({
+        variant: "destructive",
+        title: "ooops!",
+        description: "could not create your agency",
+      });
     }
   };
 

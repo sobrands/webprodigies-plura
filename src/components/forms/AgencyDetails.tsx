@@ -101,6 +101,7 @@ const AgencyDetails = ({ data }: Props) => {
       let newUserData;
       let customerId;
       if (!data?.id) {
+        // For stripe payment
         const bodyData = {
           email: values.companyEmail,
           name: values.name,
